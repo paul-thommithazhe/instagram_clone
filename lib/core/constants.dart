@@ -14,3 +14,7 @@ const secondaryColor = Colors.grey;
 //webwidt 
 
 const webScreenSize = 600;
+
+//sizedbox 
+
+const sizedBoxWithHeight10 = SizedBox(height: 10);
