@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/core/constants.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_input_field.dart';
 import 'dart:developer';
 
@@ -15,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -28,6 +31,23 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String result = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+
+    if (result == 'success') {
+      //
+    } else {
+      showSnackbar(context, result);
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -49,9 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
               SvgPicture.asset('assets/ic_instagram.svg',
                   color: primaryColor, height: 64),
 
-                
-
-                  
               //textfield input for email
               sizedBoxWithHeight10,
               TextFieldInput(
@@ -71,9 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //button for login
 
               InkWell(
-                onTap: () {
-                  log('log in button');
-                },
+                onTap: loginUser,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   width: double.infinity,
@@ -84,7 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text("Log in"),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text("Log in"),
                 ),
               ),
               const SizedBox(height: 12),
@@ -103,7 +124,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () {
                       log('signup button');
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> SignupScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignupScreen()));
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 20),
