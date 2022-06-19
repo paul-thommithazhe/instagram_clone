@@ -13,3 +13,19 @@ pickImage(ImageSource source) async {
     log('No image is selected');
   }
 }
+
+//snackbar
+
+showSnackbar(context, String content) {
+  ScaffoldMessenger.of(context)
+    ..removeCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 4),
+      ),
+    );
+}

@@ -32,8 +32,8 @@ class AuthMethods {
         UserCredential credential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
-        String photoUrl =
-            await StorageMethods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('profilePics', file, false);
 
         //user to database firestore
 
@@ -48,6 +48,12 @@ class AuthMethods {
         });
 
         result = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
+        result = 'email badly formatted';
+      } else if (err.code == 'weak-password') {
+        result = 'password should be atleast 6 characters';
       }
     } catch (err) {
       result = err.toString();
